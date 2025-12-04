@@ -9,8 +9,10 @@ import SwiftUI
 
 // MARK: - 角度文本组件 (AngleTextView)
 struct AngleTextView: View {
+    // 角度值
     let angle: Double
-
+    
+    // 视图主体
     var body: some View {
         Text("\(angle, specifier: "%.1f")°") // 显示一位小数并加上度数符号
             .font(.caption)
