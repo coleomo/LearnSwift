@@ -12,6 +12,8 @@ import SwiftUI
 struct ContentView: View {
     // 存储识别到的二维码角点
     @State var corners = QRCorners()
+    // 用于文本偏移的常量
+    let textOffset: CGFloat = 30
 
     var body: some View {
         ZStack {
@@ -33,6 +35,25 @@ struct ContentView: View {
                         path.addLine(to: corners.bottomLeft)
                         path.closeSubpath()
                     }.stroke(Color.white, lineWidth: 5)
+                    // 1. 左上角 (TopLeft)
+                    AngleTextView(angle: topLeftAngle)
+                        .position(x: corners.topLeft.x + textOffset,
+                                  y: corners.topLeft.y + textOffset)
+
+                    // 2. 右上角 (TopRight)
+                    AngleTextView(angle: topRightAngle)
+                        .position(x: corners.topRight.x - textOffset,
+                                  y: corners.topRight.y + textOffset)
+
+                    // 3. 右下角 (BottomRight)
+                    AngleTextView(angle: bottomRightAngle)
+                        .position(x: corners.bottomRight.x - textOffset,
+                                  y: corners.bottomRight.y - textOffset)
+
+                    // 4. 左下角 (BottomLeft)
+                    AngleTextView(angle: bottomLeftAngle)
+                        .position(x: corners.bottomLeft.x + textOffset,
+                                  y: corners.bottomLeft.y - textOffset)
                 }
             }
         }.edgesIgnoringSafeArea(.all)
