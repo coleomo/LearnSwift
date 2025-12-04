@@ -5,7 +5,7 @@
 //  Created by song on 2025/12/4.
 //
 
-import CoreGraphics
+import SwiftUI
 
 // 定义存储四个顶点的坐标
 struct QRCorners {

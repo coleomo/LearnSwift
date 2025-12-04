@@ -20,3 +20,12 @@ struct CircleView: View {
             .shadow(radius: 5)
     }
 }
+
+
+// 预览
+#Preview {
+    CircleView(
+        color: .red,
+        point: CGPoint(x: 100, y: 100)
+    )
+}
