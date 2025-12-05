@@ -6,7 +6,7 @@
 //
 
 // 示例用法（在 ContentView 中）
-extension ContentView {
+extension CornerAngle {
     var topLeftAngle: Double {
         // 角 A (topLeft) 由 B (topRight) 和 D (bottomLeft) 构成
         calculateAngle(p1: corners.topRight,

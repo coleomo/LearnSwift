@@ -78,7 +78,7 @@ class CameraPreView: UIView {
         self.session = session
         self.previewLayer = previewLayer
         // 启动相机会话，这么做会不会阻塞UI？
-        DispatchQueue.global(qos: .background).async {
+        Task {
             session.startRunning()
         }
     }
