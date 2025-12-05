@@ -14,11 +14,14 @@ class CameraMan: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleBuffe
     @Published var session = AVCaptureSession()
     @Published var debugInfo: String = ""
     @Published var isScanning: Bool = false
+    @Published var qrCorners = QRCorners()
+    @Published var previewLayer: AVCaptureVideoPreviewLayer? = nil
 
     // 视频输出和序列处理器
     private let output = AVCaptureVideoDataOutput()
     // Vision序列请求处理器
     private let sequenceHandler = VNSequenceRequestHandler()
+    
 
     // 检查相机权限并设置会话
     func checkPermissionAndSetup() {
@@ -80,6 +83,7 @@ class CameraMan: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleBuffe
                     self.positionDesc = "未检测到二维码"
                     self.isScanning = false
                     self.debugInfo = ""
+                    self.qrCorners = QRCorners()
                 }
                 return
             }
@@ -110,7 +114,7 @@ class CameraMan: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleBuffe
         let bottomWidth = distance(p1: bl, p2: br)
 
         // 设定阈值，超过这个比例才认为是明显的倾斜, 15%的差异
-        let threshold: CGFloat = 1.15
+        let threshold: CGFloat = 1.03
         var horizontalStatus = ""
         var verticalStatus = ""
 
@@ -149,6 +153,12 @@ class CameraMan: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleBuffe
             self.positionDesc = finalResult
             self.isScanning = true
             self.debugInfo = String(format: "LeftHeight: %.2f, RightHeight: %.2f, TopWidth: %.2f, BottomWidth: %.2f", leftHeight, rightHeight, topWidth, bottomWidth)
+            self.qrCorners = QRCorners(
+                topLeft: tl,
+                topRight: tr,
+                bottomLeft: bl,
+                bottomRight: br
+            )
         }
     }
 }

@@ -15,17 +15,16 @@ struct VisionDis: View {
         ZStack {
             // 相机预览层
             VisionPreview(session: scannerModel.session)
-
             // 信息覆盖层
             VStack {
                 Spacer()
                 VStack(spacing: 15) {
                     Text(scannerModel.positionDesc)
-                        .font(.system(size: 40, weight: .bold))
+                        .font(.system(size: 30, weight: .bold))
                         .foregroundStyle(.white)
                         .shadow(radius: 2)
                 }
-            }
+            }.padding(.bottom, 100)
         }
         .edgesIgnoringSafeArea(.all)
         .onAppear {
