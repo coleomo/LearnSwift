@@ -12,7 +12,6 @@ import UIKit
 struct VisonCamPre: UIViewRepresentable {
     
     
-    
     func makeUIView(context: Context) -> UIView {
         let view = UIView()
         view.backgroundColor = .black

@@ -34,6 +34,12 @@ func calculateAngle(p1: CGPoint, vertex: CGPoint, p2: CGPoint) -> Double {
 
     // 6. 转换为度数
     let degrees = radians * 180.0 / Double.pi
-    
+
     return degrees
+}
+
+// 计算两点距离
+func distance(p1: CGPoint, p2: CGPoint) -> CGFloat {
+    // 计算两点之间的欧几里得距离
+    return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2))
 }

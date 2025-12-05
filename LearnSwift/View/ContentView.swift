@@ -13,7 +13,9 @@ struct ContentView: View {
     
     // 视图主体
     var body: some View {
-        CornerAngle()
+        // 角点和角度
+        // CornerAngle()
+        VisionDis()
     }
 }
 
