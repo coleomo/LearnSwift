@@ -161,7 +161,7 @@ class CameraMan: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleBuffe
         // 综合判断
         var finalResult = "左侧"
         // 差值判断
-        let subLength = 0.01
+        let subLength = 0.02
         // 通过差值来判断
         let leftSubRight = leftHeight - rightHeight * threshold
         let rightSubLeft = rightHeight - leftHeight * threshold
