@@ -20,6 +20,7 @@ class CameraMan: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleBuffe
     @Published var isScanning: Bool = false
     // 识别到的四个角信息
     @Published var qrCorners = QRCorners()
+    // 相机预览层
     @Published var previewLayer: AVCaptureVideoPreviewLayer? = nil
 
     // 视频输出和序列处理器
@@ -52,16 +53,21 @@ class CameraMan: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleBuffe
         }
         // 配置会话
         session.beginConfiguration()
+        // 添加视频输入
         if session.canAddInput(input) {
             session.addInput(input)
         }
+        // 添加数据流输出
         if session.canAddOutput(output) {
+            // 设置输出代理，存在队列中，防止积压
             output.setSampleBufferDelegate(self, queue: DispatchQueue(label: "videoQueue"))
+            // 添加输出
             session.addOutput(output)
         }
         // 提交配置
         session.commitConfiguration()
-        // 开始运行会话
+        // 开始运行会话，使用task是协程的方式执行，效率更高
+        // 也可以使用DispatchQueue
         Task {
             self.session.startRunning()
         }
@@ -75,7 +81,7 @@ class CameraMan: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleBuffe
         }
         // 创建二维码检测请求
         let request = VNDetectBarcodesRequest { [weak self] request, _ in
-            //
+            // 判断self是不是销毁了
             guard let self = self else { return }
             // 处理检测结果
             guard let results = request.results as? [VNBarcodeObservation] else {
@@ -91,7 +97,7 @@ class CameraMan: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleBuffe
                 }
                 return
             }
-            // 获取二维码的边界框
+            // 计算二维码的边界框
             self.calculateDistance(observation: qrCode)
         }
 
