@@ -177,6 +177,8 @@ class CameraMan: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleBuffe
             finalResult = "前方"
         } else if bottomSubTop > subLength {
             finalResult = "后方"
+        }else{
+            finalResult = "上方"
         }
 
         // 在主线程中，更新ui
