@@ -9,11 +9,16 @@ import AVFoundation
 import SwiftUI
 import Vision
 
+// 观察者对象，用于实现数据传递，实现了ObservableObject
 class CameraMan: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleBufferDelegate {
+    // 子属性要使用Published属性包装器，当StateObject修改的时候，才能被所有ObervedObject观察到
     @Published var positionDesc = "未检测到二维码"
+    // 摄像头回话
     @Published var session = AVCaptureSession()
     @Published var debugInfo: String = ""
+    // 是不是正在扫描
     @Published var isScanning: Bool = false
+    // 识别到的四个角信息
     @Published var qrCorners = QRCorners()
     @Published var previewLayer: AVCaptureVideoPreviewLayer? = nil
 
@@ -21,7 +26,6 @@ class CameraMan: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleBuffe
     private let output = AVCaptureVideoDataOutput()
     // Vision序列请求处理器
     private let sequenceHandler = VNSequenceRequestHandler()
-    
 
     // 检查相机权限并设置会话
     func checkPermissionAndSetup() {

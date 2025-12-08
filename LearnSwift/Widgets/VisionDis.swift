@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct VisionDis: View {
+    // 修改状态，有一个观察者对象
     @StateObject private var scannerModel = CameraMan()
 
     // 距离二维码的位置
