@@ -59,7 +59,7 @@ class CameraMan: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleBuffe
         }
         // 添加数据流输出
         if session.canAddOutput(output) {
-            // 设置输出代理，存在队列中，防止积压
+            // 设置输出代理（自己的captureOutput函数），存在队列中，防止积压
             output.setSampleBufferDelegate(self, queue: DispatchQueue(label: "videoQueue"))
             // 添加输出
             session.addOutput(output)
@@ -128,11 +128,18 @@ class CameraMan: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleBuffe
         var horizontalStatus = ""
         var verticalStatus = ""
 
+//        print("leftHeight:\(leftHeight)")
+//        print("rightHeight:\(rightHeight * threshold)")
+//        print("topWidth:\(topWidth)")
+//        print("bottomWidth:\(bottomWidth * threshold)")
+
         // 判断水平倾斜
         // 如果左边明显比右边长，说明相机距离二维码左边靠近，相机在左侧
         if leftHeight > rightHeight * threshold {
+            print("leftHeight - rightHeight * threshold: \(leftHeight - rightHeight * threshold)")
             horizontalStatus = "左侧"
         } else if rightHeight > leftHeight * threshold {
+            print("rightHeight - leftHeight * threshold: \(rightHeight - leftHeight * threshold)")
             horizontalStatus = "右侧"
         } else {
             horizontalStatus = "居中"
@@ -142,23 +149,37 @@ class CameraMan: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleBuffe
         // 注意：Vision坐标系Y轴向上。
         // 如果上边比下边宽，说明上边离相机近 -> 相机在上方
         if topWidth > bottomWidth * threshold {
+            print("topWidth - bottomWidth * threshold: \(topWidth - bottomWidth * threshold)")
             verticalStatus = "上方"
         } else if bottomWidth > topWidth * threshold {
+            print("bottomWidth - topWidth * threshold: \(bottomWidth - topWidth * threshold)")
             verticalStatus = "下方"
         } else {
             verticalStatus = "中间"
         }
 
         // 综合判断
-        var finalResult = ""
-
-        if horizontalStatus == "居中", verticalStatus == "中间" {
-            finalResult = "正前方"
-        } else {
-            finalResult = "\(verticalStatus)\(horizontalStatus)"
+        var finalResult = "左侧"
+        // 差值判断
+        let subLength = 0.01
+        // 通过差值来判断
+        let leftSubRight = leftHeight - rightHeight * threshold
+        let rightSubLeft = rightHeight - leftHeight * threshold
+        let topSubBottom = topWidth - bottomWidth * threshold
+        let bottomSubTop = bottomWidth - topWidth * threshold
+        print("leftSubRight: \(leftSubRight)")
+        print("topSubBottom: \(topSubBottom)")
+        if leftSubRight > subLength {
+            finalResult = "左侧"
+        } else if rightSubLeft > subLength {
+            finalResult = "右侧"
+        } else if topSubBottom > subLength {
+            finalResult = "前方"
+        } else if bottomSubTop > subLength {
+            finalResult = "后方"
         }
 
-        // 更新ui
+        // 在主线程中，更新ui
         DispatchQueue.main.async {
             self.positionDesc = finalResult
             self.isScanning = true
