@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// 主视图，显示相机预览和二维码位置描述
 struct VisionDis: View {
     // 修改状态，有一个观察者对象
     @StateObject private var scannerModel = CameraMan()
