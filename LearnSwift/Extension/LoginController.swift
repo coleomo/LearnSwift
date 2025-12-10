@@ -28,7 +28,7 @@ extension LoginView {
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 100),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             // 手机号输入框:标题下方20，左右间距30，高度44
-            phoneTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
+            phoneTextField.topAnchor.constraint(equalTo: view.centerYAnchor, constant: -100),
             phoneTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
             phoneTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
             phoneTextField.heightAnchor.constraint(equalToConstant: 44),
@@ -60,7 +60,9 @@ extension LoginView {
 extension LoginView {
     // 登陆注册按钮点击
     @objc func actionButtonTapped() {
-        print("点击登陆注册按钮")
+        // 拿到输入框对应的值
+        print("点击登陆注册按钮\(String(describing: phoneTextField.text))")
+        print("点击登陆注册按钮\(String(describing: passwordText.text))")
         hideKeyBoard()
     }
 
