@@ -4,6 +4,7 @@
 //
 //  Created by song on 2025/12/4.
 //
+import UIKit
 
 // 示例用法（在 ContentView 中）
 extension CornerAngle {
@@ -36,3 +37,4 @@ extension CornerAngle {
                        p2: corners.bottomLeft)
     }
 }
+

@@ -10,12 +10,12 @@ import SwiftData
 import SwiftUI
 
 struct ContentView: View {
-    
     // 视图主体
     var body: some View {
         // 角点和角度
         // CornerAngle()
-        VisionDis()
+        // VisionDis()
+        LoginRegisterView()
     }
 }
 
