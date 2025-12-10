@@ -37,6 +37,14 @@ class CameraMan: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleBuffe
             setupCamera()
         case .notDetermined:
             print("请求相机使用权限")
+            AVCaptureDevice.requestAccess(for: .video) { granted in
+                if granted {
+                    print("用户授权使用相机")
+                    self.setupCamera()
+                } else {
+                    print("用户拒绝使用相机")
+                }
+            }
         default:
             break
         }
@@ -177,7 +185,7 @@ class CameraMan: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleBuffe
             finalResult = "前方"
         } else if bottomSubTop > subLength {
             finalResult = "后方"
-        }else{
+        } else {
             finalResult = "上方"
         }
 
