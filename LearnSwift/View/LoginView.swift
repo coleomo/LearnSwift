@@ -53,8 +53,8 @@ class LoginView: UIViewController {
         btn.setTitleColor(.white, for: .normal)
         btn.layer.cornerRadius = 8
         btn.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        btn.isEnabled = true
-        btn.alpha = 0.6
+        // 配置为false就不能触发点击事件
+        btn.isEnabled = false
         // 不能在这里添加，因为这个时候self实例还没有完全初始化，闭包捕获的self可能不是预期的实例
         // btn.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
         return btn
