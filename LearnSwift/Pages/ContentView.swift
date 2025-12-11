@@ -14,8 +14,11 @@ struct ContentView: View {
     var body: some View {
         // 角点和角度
         // CornerAngle()
+        // 通过边距形变测方位
         // VisionDis()
-        LoginRegisterView()
+        // 用UIViewController例子
+        // LoginRegisterView()
+        PlaneArLayout()
     }
 }
 

@@ -16,7 +16,7 @@ extension LoginView {
             item.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(item)
         }
-        // 绑定事件
+        // 绑定事件，这个时候self就有值了
         actionButton.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
         switchButton.addTarget(self, action: #selector(switchPageState), for: .touchUpInside)
     }

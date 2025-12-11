@@ -107,7 +107,6 @@ struct LoginRegisterView: UIViewControllerRepresentable {
     }
 
     // MARK: - 必须实现的方法（更新 UIViewController）
-
     func updateUIViewController(_ uiViewController: LoginView, context: Context) {
         // 无需更新，空实现即可
     }
