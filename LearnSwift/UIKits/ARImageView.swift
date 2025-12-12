@@ -26,8 +26,9 @@ struct ImageARView: UIViewRepresentable {
         } else {
             print("⚠️ 未加载到 AR Reference Images")
         }
-
+        // config.debugDescription = [.]
         arView.session.run(config)
+        arView.debugOptions = [.showWorldOrigin, .showFeaturePoints]
         arView.session.delegate = context.coordinator
 
         return arView
@@ -54,15 +55,19 @@ struct ImageARView: UIViewRepresentable {
             for anchor in anchors {
                 if let imageAnchor = anchor as? ARImageAnchor {
                     print("🎉 识别到图片：\(imageAnchor.referenceImage.name ?? "unknown")")
+                    // 在图片上放3D物体
                     // place3DContent(on: imageAnchor, session: session)
-                    // addPlaneVisual(anchor: imageAnchor, session: session)
+                    // 添加水平面可视化
+                    addPlaneVisual(anchor: imageAnchor, session: session)
                     // 图片中心点
                     imageCenterRed(anchor: imageAnchor, session: session)
                     // 从摄像头射线检测水平
                     // imagePlaneDetect(anchor: imageAnchor, session: session)
-                } else if let planeAnchor = anchor as? ARPlaneAnchor {
-                    // addPlaneVisual(anchor: planeAnchor, session: session)
                 }
+                // else if let planeAnchor = anchor as? ARPlaneAnchor {
+                //     // 识别到水平面
+                //     addPlaneVisual(anchor: planeAnchor, session: session)
+                // }
             }
         }
 
@@ -78,8 +83,29 @@ struct ImageARView: UIViewRepresentable {
                 let material = SimpleMaterial(color: .red, roughness: 0.0, isMetallic: true)
                 // 创建实体
                 let center = ModelEntity(mesh: mesh, materials: [material])
-                center.position = [0, 0, 0]
+                center.position = [0, 0.01, 0]
                 anchorEntity.addChild(center)
+                arView.scene.addAnchor(anchorEntity)
+            }
+        }
+
+        // 创建红色方块在图片中心
+        func imageCenterBox(anchor: ARImageAnchor, session: ARSession) {
+            print("创建红色方块在图片中心")
+            if let arView = arView {
+                // mesh是网格
+                let mesh = MeshResource.generateBox(size: 0.02)
+                // matrial 是素材材质
+                let material = SimpleMaterial(color: .red, roughness: 0.5, isMetallic: true)
+                // 红色方块实例
+                let boxEntity = ModelEntity(mesh: mesh, materials: [material])
+                // 将红色方块添加到中心位置,并且在y轴向上
+                boxEntity.position = [0, 0.01, 0]
+                // 创建锚点实例
+                let anchorEntity = AnchorEntity(anchor: anchor)
+                // 锚点添加模型
+                anchorEntity.addChild(boxEntity)
+                // 视图添加锚点
                 arView.scene.addAnchor(anchorEntity)
             }
         }
@@ -115,7 +141,9 @@ struct ImageARView: UIViewRepresentable {
 
             // 把盒子放到图片上方
             box.position = [0, 0.03, 0]
+            // 锚点添加盒子模型
             anchorEntity.addChild(box)
+            // 视图添加锚点
             arView.scene.addAnchor(anchorEntity)
         }
 
@@ -127,13 +155,13 @@ struct ImageARView: UIViewRepresentable {
             }
             print("开始添加水平面")
             // let size = anchor.planeExtent
-            let plane = MeshResource.generatePlane(width: 0.3, depth: 0.3)
-            let material = SimpleMaterial(color: .blue, isMetallic: true)
+            let plane = MeshResource.generatePlane(width: 0.2, depth: 0.3)
+            let material = SimpleMaterial(color: UIColor.blue.withAlphaComponent(0.7), isMetallic: true)
 
             let model = ModelEntity(mesh: plane, materials: [material])
             // 拿到图片的中心点坐标
-            let position = anchor.transform.columns.3
-            model.position = SIMD3(position.x, 0, position.z)
+            // let position = anchor.transform.columns.3
+            model.position = SIMD3(0, 0, 0)
 
             let anchorEntity = AnchorEntity(anchor: anchor)
             anchorEntity.addChild(model)
