@@ -55,12 +55,32 @@ struct ImageARView: UIViewRepresentable {
                 if let imageAnchor = anchor as? ARImageAnchor {
                     print("🎉 识别到图片：\(imageAnchor.referenceImage.name ?? "unknown")")
                     // place3DContent(on: imageAnchor, session: session)
-                    addPlaneVisual(anchor: imageAnchor, session: session)
+                    // addPlaneVisual(anchor: imageAnchor, session: session)
+                    // 图片中心点
+                    imageCenterRed(anchor: imageAnchor, session: session)
                     // 从摄像头射线检测水平
                     // imagePlaneDetect(anchor: imageAnchor, session: session)
                 } else if let planeAnchor = anchor as? ARPlaneAnchor {
                     // addPlaneVisual(anchor: planeAnchor, session: session)
                 }
+            }
+        }
+
+        // 图片中心点添加红色圆球
+        func imageCenterRed(anchor: ARImageAnchor, session: ARSession) {
+            // 图片的中心点就是图片锚点的原点0，0，0
+            print("图片中心点添加红色圆球")
+            if let arView = arView {
+                let anchorEntity = AnchorEntity(anchor: anchor)
+                // 创建圆形网格
+                let mesh = MeshResource.generateSphere(radius: 0.01)
+                // 创建金属材质
+                let material = SimpleMaterial(color: .red, roughness: 0.0, isMetallic: true)
+                // 创建实体
+                let center = ModelEntity(mesh: mesh, materials: [material])
+                center.position = [0, 0, 0]
+                anchorEntity.addChild(center)
+                arView.scene.addAnchor(anchorEntity)
             }
         }
 
