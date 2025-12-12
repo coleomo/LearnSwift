@@ -18,7 +18,9 @@ struct ContentView: View {
         // VisionDis()
         // 用UIViewController例子
         // LoginRegisterView()
-        PlaneArLayout()
+        // 平面检测
+        // PlaneArLayout()
+        ImageARView()
     }
 }
 
