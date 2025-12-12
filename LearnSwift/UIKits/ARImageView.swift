@@ -101,6 +101,10 @@ struct ImageARView: UIViewRepresentable {
                 let boxEntity = ModelEntity(mesh: mesh, materials: [material])
                 // 将红色方块添加到中心位置,并且在y轴向上
                 boxEntity.position = [0, 0.01, 0]
+                // 创建碰撞
+                let collisionShape = ShapeResource.generateBox(size: [0.02, 0.02, 0.02])
+                // 添加碰撞组件：可以用多个碰撞形状
+                boxEntity.components.set(CollisionComponent(shapes: [collisionShape]))
                 // 创建锚点实例
                 let anchorEntity = AnchorEntity(anchor: anchor)
                 // 锚点添加模型
