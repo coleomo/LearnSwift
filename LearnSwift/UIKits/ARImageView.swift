@@ -12,6 +12,8 @@ import SwiftUI
 struct ImageARView: UIViewRepresentable {
     // 游戏控制管理器，使用StateObject是最合适单例模式，ObservedObject适合从父视图传递进来
     @StateObject var gameMan = GameManager.shared
+    // usdz模型
+    let modelEntry = try? ModelEntity.loadModel(named: "robot.usdz")
 
     // 创建视图
     func makeUIView(context: Context) -> ARView {
@@ -83,15 +85,33 @@ struct ImageARView: UIViewRepresentable {
                     // 添加水平面可视化
                     addPlaneVisual(anchor: imageAnchor, session: session)
                     // 图片中心点
-                    imageCenterRed(anchor: imageAnchor, session: session)
+                    // imageCenterRed(anchor: imageAnchor, session: session)
                     // 从摄像头射线检测水平
                     // imagePlaneDetect(anchor: imageAnchor, session: session)
+                    // 添加usdz模型到图片中心
+                    addUSZModel(anchor: imageAnchor, session: session)
                 }
                 // else if let planeAnchor = anchor as? ARPlaneAnchor {
                 //     // 识别到水平面
                 //     addPlaneVisual(anchor: planeAnchor, session: session)
                 // }
             }
+        }
+
+        // 给图片中心添加模型
+        func addUSZModel(anchor: ARImageAnchor, session: ARSession) {
+            print("给图片中心添加模型")
+            guard let arView = arView, let modelEntry = parent.modelEntry else {
+                return
+            }
+            let anchorEntity = AnchorEntity(anchor: anchor)
+            modelEntry.position = [0, 0, 0]
+            modelEntry.scale = [0.002, 0.002, 0.002]
+            // 添加碰撞组件
+            modelEntry.generateCollisionShapes(recursive: true)
+            modelEntry.name = "robot"
+            anchorEntity.addChild(modelEntry)
+            arView.scene.addAnchor(anchorEntity)
         }
 
         // 图片中心点添加红色圆球
