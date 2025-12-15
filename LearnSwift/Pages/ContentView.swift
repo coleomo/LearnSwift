@@ -20,7 +20,16 @@ struct ContentView: View {
         // LoginRegisterView()
         // 平面检测
         // PlaneArLayout()
-        ImageARView()
+        ZStack {
+            // AR游戏的内容视图
+            // 把.ignoresSafeArea(.all)放在ARview层，可以防止gameui层出现在安全区域
+            ImageARView()
+                .ignoresSafeArea(.all)
+
+            // 因为需要界面操作，需要添加一个界面上的控制ui层，用于显示开始、暂停、分数等
+            GameUIView()
+        }
+        // 如果把.ignoresSafeArea(.all)放在最外层，就会导致gamui层出现在安全区域中
     }
 }
 

@@ -10,7 +10,10 @@ import RealityKit
 import SwiftUI
 
 struct ImageARView: UIViewRepresentable {
-    //
+    // 游戏控制管理器，使用StateObject是最合适单例模式，ObservedObject适合从父视图传递进来
+    @StateObject var gameMan = GameManager.shared
+
+    // 创建视图
     func makeUIView(context: Context) -> ARView {
         let arView = ARView(frame: .zero)
         // 给协调器里面的arview赋值，用于绘制放置物体等
@@ -40,7 +43,7 @@ struct ImageARView: UIViewRepresentable {
         Coordinator(self)
     }
 
-    // MARK: - Coordinator
+    // MARK: - 协调器，用于和swiftui协同
 
     class Coordinator: NSObject, ARSessionDelegate {
         var parent: ImageARView
