@@ -22,6 +22,8 @@ class GameManager: ObservableObject {
     @Published var score: Int = 0
     // 子弹集合，收集子弹id和实体，空字典[:]
     @Published var bullets: [String: Entity] = [:]
+    // 收集碰撞事件的订阅，否则会不知道碰撞事件
+    private var cancellables = Set<AnyCancellable>()
 
     // Arview 视图
     private var arView: ARView?
@@ -29,6 +31,11 @@ class GameManager: ObservableObject {
     // 配置arview
     func setupArView(_ arView: ARView) {
         self.arView = arView
+        // 添加碰撞检测事件监听订阅消息
+        self.arView?.scene.subscribe(to: CollisionEvents.Began.self) { [weak self] event in
+            // 处理碰撞事件
+            self?.onCollision(event)
+        }.store(in: &cancellables)
     }
 
     // 开始游戏逻辑
@@ -79,8 +86,13 @@ class GameManager: ObservableObject {
         let sphereShape = MeshResource.generateSphere(radius: 0.02)
         // 创建子弹材质
         let material = SimpleMaterial(color: .red, isMetallic: true)
+        // 创建碰撞形状
+        let collisionShape = ShapeResource.generateSphere(radius: 0.02)
         // 创建子弹实体
         let bulletEntity = ModelEntity(mesh: sphereShape, materials: [material])
+        // 设置碰撞组件
+        bulletEntity.components.set(CollisionComponent(shapes: [collisionShape]))
+        bulletEntity.name = "bullet"
         bulletAnchor.addChild(bulletEntity)
         arView.scene.addAnchor(bulletAnchor)
         // 子弹收集
@@ -101,5 +113,10 @@ class GameManager: ObservableObject {
             // 打印看一下子弹字典
             print("子弹字典\(self.bullets)")
         }
+    }
+
+    // 监听碰撞事件
+    func onCollision(_ event: CollisionEvents.Began) {
+        print("碰撞事件")
     }
 }

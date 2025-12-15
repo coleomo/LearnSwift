@@ -106,6 +106,10 @@ struct ImageARView: UIViewRepresentable {
                 let material = SimpleMaterial(color: .red, roughness: 0.0, isMetallic: true)
                 // 创建实体
                 let center = ModelEntity(mesh: mesh, materials: [material])
+                // 创建碰撞形状
+                let collisionShape = ShapeResource.generateSphere(radius: 0.01)
+                // 设置碰撞组件
+                center.components.set(CollisionComponent(shapes: [collisionShape]))
                 center.position = [0, 0.01, 0]
                 anchorEntity.addChild(center)
                 arView.scene.addAnchor(anchorEntity)
@@ -124,10 +128,12 @@ struct ImageARView: UIViewRepresentable {
                 let boxEntity = ModelEntity(mesh: mesh, materials: [material])
                 // 将红色方块添加到中心位置,并且在y轴向上
                 boxEntity.position = [0, 0.01, 0]
-                // 创建碰撞
+                // 创建碰撞形状
                 let collisionShape = ShapeResource.generateBox(size: [0.02, 0.02, 0.02])
                 // 添加碰撞组件：可以用多个碰撞形状
                 boxEntity.components.set(CollisionComponent(shapes: [collisionShape]))
+                // 必须配置，不然不会触发碰撞事件
+                boxEntity.name = "boxentity"
                 // 创建锚点实例
                 let anchorEntity = AnchorEntity(anchor: anchor)
                 // 锚点添加模型
@@ -184,12 +190,16 @@ struct ImageARView: UIViewRepresentable {
             // let size = anchor.planeExtent
             let plane = MeshResource.generatePlane(width: 0.2, depth: 0.3)
             let material = SimpleMaterial(color: UIColor.blue.withAlphaComponent(0.7), isMetallic: true)
-
+            // 场地平面实例
             let model = ModelEntity(mesh: plane, materials: [material])
+            // // 创建碰撞形状
+            // let collisionShape = ShapeResource.generateBox(size: [0.2])
+            // // 添加碰撞组件
+            // model.components.set(CollisionComponent(shapes: [collisionShape]))
             // 拿到图片的中心点坐标
             // let position = anchor.transform.columns.3
             model.position = SIMD3(0, 0, 0)
-
+            // 锚点实例
             let anchorEntity = AnchorEntity(anchor: anchor)
             anchorEntity.addChild(model)
             arView.scene.addAnchor(anchorEntity)
