@@ -85,5 +85,21 @@ class GameManager: ObservableObject {
         arView.scene.addAnchor(bulletAnchor)
         // 子弹收集
         bullets[bulletId] = bulletEntity
+        // 计算子弹目标位置
+        let targetPos = pos + forward * 10
+        // 自动移动中的变形和位移
+        let transform = Transform(scale: bulletEntity.scale, rotation: bulletEntity.orientation, translation: targetPos)
+        // 子弹移动
+        bulletAnchor.move(to: transform, relativeTo: nil, duration: 1)
+        // 1秒后消失
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            bulletEntity.removeFromParent()
+            // 在子弹字典中找到元素并移除
+            if let _ = self.bullets[bulletId] {
+                self.bullets[bulletId] = nil
+            }
+            // 打印看一下子弹字典
+            print("子弹字典\(self.bullets)")
+        }
     }
 }
