@@ -16,3 +16,15 @@ enum GameState {
     // 结束
     case over
 }
+
+// 服务器连接状态
+enum ConnectState {
+    // 正在连接
+    case connecting
+    // 已连接
+    case connected
+    // 连接失败
+    case failed
+    // 断开连接
+    case disconnected
+}

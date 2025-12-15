@@ -13,7 +13,7 @@ struct GameUIView: View {
     var body: some View {
         VStack {
             HStack {
-                Text("左侧分数")
+                Text("分数:\(gameMan.score)")
                 Spacer()
                 Text("右侧状态")
             }

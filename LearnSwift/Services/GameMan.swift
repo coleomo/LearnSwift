@@ -20,6 +20,8 @@ class GameManager: ObservableObject {
     @Published var gameState: GameState = .ready
     // 游戏分数
     @Published var score: Int = 0
+    // 和服务器连接状态
+    @Published var connectState: ConnectState = .disconnected
     // 子弹集合，收集子弹id和实体，空字典[:]
     @Published var bullets: [String: Entity] = [:]
     // 收集碰撞事件的订阅，否则会不知道碰撞事件
@@ -105,6 +107,7 @@ class GameManager: ObservableObject {
         bulletAnchor.move(to: transform, relativeTo: nil, duration: 1)
         // 1秒后消失
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            // 从父视图中移除自己
             bulletEntity.removeFromParent()
             // 在子弹字典中找到元素并移除
             if let _ = self.bullets[bulletId] {
@@ -118,5 +121,17 @@ class GameManager: ObservableObject {
     // 监听碰撞事件
     func onCollision(_ event: CollisionEvents.Began) {
         print("碰撞事件")
+        // 获取碰撞的两个实例
+        let entityA = event.entityA
+        let entityB = event.entityB
+        // 判断是不是子弹和敌人碰撞
+        if entityA.name != entityB.name {
+            print("两个碰撞体不一样")
+            // 找到子弹实体
+            score += 10
+            // 移除子弹和敌人
+            entityA.removeFromParent()
+            entityB.removeFromParent()
+        }
     }
 }
