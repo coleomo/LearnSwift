@@ -43,3 +43,22 @@ func distance(p1: CGPoint, p2: CGPoint) -> CGFloat {
     // 计算两点之间的欧几里得距离
     return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2))
 }
+
+// 辅助函数
+// 计算向量的归一化，有什么作用？
+// 归一化向量是将一个向量转换为单位向量（长度为1的向量），它在计算机图形学、物理模拟和机器学习等领域中非常有用。归一化后的向量保留了原始向量的方向，但长度被调整为1，这使得它在表示方向时更加方便，且在进行各种计算（如点积、投影等）时更加稳定和一致。
+func normalize(_ vector: SIMD3<Float>) -> SIMD3<Float> {
+    let length = sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z)
+    guard length > 0 else { return SIMD3<Float>(0, 0, 0) }
+    return SIMD3<Float>(vector.x / length, vector.y / length, vector.z / length)
+}
+
+// 计算向量的长度
+func length(_ vector: SIMD3<Float>) -> Float {
+    return sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z)
+}
+
+// 计算两个向量的点积
+func dot(_ a: SIMD3<Float>, _ b: SIMD3<Float>) -> Float {
+    return a.x * b.x + a.y * b.y + a.z * b.z
+}

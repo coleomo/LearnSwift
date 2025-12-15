@@ -33,7 +33,11 @@ struct ImageARView: UIViewRepresentable {
         arView.session.run(config)
         arView.debugOptions = [.showWorldOrigin, .showFeaturePoints]
         arView.session.delegate = context.coordinator
-
+        // 添加点击函数
+        let tapGuest = UITapGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.handleGameTap))
+        arView.addGestureRecognizer(tapGuest)
+        // 设置游戏管理器
+        gameMan.setupArView(arView)
         return arView
     }
 
@@ -47,10 +51,26 @@ struct ImageARView: UIViewRepresentable {
 
     class Coordinator: NSObject, ARSessionDelegate {
         var parent: ImageARView
+        // 游戏管理器
+        var gameMan: GameManager {
+            return parent.gameMan
+        }
+
+        // 弱引用
         weak var arView: ARView?
 
         init(_ parent: ImageARView) {
             self.parent = parent
+        }
+
+        // 添加点击屏幕的处理函数，给arview用
+        // 要加上objc，不然无法被外层的arview选中
+        @objc func handleGameTap(_ gesture: UITapGestureRecognizer) {
+            print("点击屏幕了")
+            // 判断arview是否存在
+            guard arView != nil else { return }
+            // 调用gameMan的发射子弹函数
+            gameMan.shoot()
         }
 
         // 图片第一次被识别
