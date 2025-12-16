@@ -24,6 +24,8 @@ class GameManager: ObservableObject {
     @Published var connectState: ConnectState = .disconnected
     // 子弹集合，收集子弹id和实体，空字典[:]
     @Published var bullets: [String: Entity] = [:]
+    // 创建敌人的血量
+    @Published var enemyHP: Int = 100
     // 收集碰撞事件的订阅，否则会不知道碰撞事件
     private var cancellables = Set<AnyCancellable>()
 
@@ -133,5 +135,10 @@ class GameManager: ObservableObject {
             entityA.removeFromParent()
             entityB.removeFromParent()
         }
+    }
+    
+    // 敌人血量检测
+    func checkEnemyHP() {
+        print("血量")
     }
 }
