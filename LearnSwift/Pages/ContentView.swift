@@ -32,8 +32,3 @@ struct ContentView: View {
         // 如果把.ignoresSafeArea(.all)放在最外层，就会导致gamui层出现在安全区域中
     }
 }
-
-// 预览
-#Preview {
-    ContentView()
-}
