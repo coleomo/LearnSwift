@@ -10,6 +10,7 @@ import SwiftData
 
 @main
 struct LearnSwiftApp: App {
+    // save data
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,
