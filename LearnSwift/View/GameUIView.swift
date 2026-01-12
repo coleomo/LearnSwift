@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct GameUIView: View {
-    // 游戏控制
+    // 全局单例游戏控制
     @StateObject var gameMan = GameManager.shared
 
     var body: some View {

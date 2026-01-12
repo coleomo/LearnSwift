@@ -12,6 +12,7 @@ import RealityKit
 class GameManager: ObservableObject {
     // 单利模式
     static let shared = GameManager()
+    // 内部私有初始化函数，防止外部初始化
     private init() {
         print("🎮 GameManager 初始化，地址: \(Unmanaged.passUnretained(self).toOpaque())")
     }
